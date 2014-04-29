@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>舌尖上的中国</title>
+    <link rel="stylesheet" href="http://g.tbcdn.cn/ilw/lib/0.2.3/h5base.css">
+    <link rel="stylesheet" href="style.css">
+<style>
+    @-webkit-keyframes circle {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(359deg); }
+    }
+    @keyframes circle {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(359deg); }
+    }
+    .loading {
+        width: 30px;
+        height: 30px;
+        border: 5px solid #ccc;
+        border-left-color: #111;
+        border-radius: 50%;
+        -webkit-animation: circle 1s infinite linear;
+        animation: circle 1s infinite linear;
+        margin: 150px auto 0px;
+    }
+    .mask {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-color: #fff;
+        visibility: visible;
+        opacity: 1;
+        -webkit-transition: all 0.5s ease-out;
+        transition: all 0.5s ease-out;
+    }
+    .mask.hide {
+        visibility: hidden;
+        opacity: 0;
+    }
+</style>
+</head>
+<body>
+    <div class="mask hide">
+        <div class="loading"></div>
+    </div>
+    <header class="header">
+        <img src="images/a_01.jpg" alt="">
+        <div class="attend"></div>        
+    </header>
+    <section class="activity">
+        <div class="activity-item">
+            <img src="images/a_02.jpg" alt="">
+            <div class="attend"></div>
+        </div>
+        <div class="activity-item">
+            <img src="images/a_03.jpg" alt="">
+            <div class="attend"></div>
+        </div>
+        <div class="activity-item">
+            <img src="images/a_04.jpg" alt="">
+            <div class="attend"></div>
+        </div>
+    </section>
+    <section class="more">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </section>
+<script src="http://g.tbcdn.cn/mtb/zepto/1.0.4/zepto.js"></script>
+<script src="http://g.tbcdn.cn/??ilw/lib/0.2.3/sea.js,ilw/lib/0.2.3/iscroll.js,ilw/lib/0.4.13/api/laiwang.js"></script>
+<script>
+(function(global, undefined) {
+    'use strict';
+    var Singleton = (function() {
+        var instance;
+        function init() {
+
+        }
+        return {
+            getInstance: function() {
+                if (!instance) {
+                    instance = init(); 
+                }
+                return instance;
+            }
+        };
+    })();
+    /*-- lazy load img start --*/
+    var lazyLoad = (function() {
+
+        return function(name) {
+            var className;
+            
+            this.getClassName = function() {
+                return className;
+            };
+            this.setClassName = function(name) {
+                className = name                
+            };
+
+            //constructor
+            this.setClassName(name);
+        };
+
+    })();
+
+    lazyLoad.addClass = function(element, nameArray) {
+        var classNames = element.className.split(' ');
+        for (var i = 0, nameLen = nameArray.length; i < nameLen; i++) {
+            var exist = false;
+            for (var j = 0, classLen = classNames.length; j < classLen; j++) {
+                if (nameArray[i] === classNames[j]) {
+                    exist = true;
+                    break;
+                }
+            }
+            if (!exist) {
+                classNames.push(nameArray[i]);
+            }
+        }
+        element.className = classNames.join(' ');
+    };
+    lazyLoad.removeClass = function(element, nameArray) {
+        var classNames = element.className.split(' ');
+        for (var i = 0, nameLen = nameArray.length; i < nameLen; i++) {
+            for (var j =  classNames.length - 1; j >= 0; j--) {
+                if (nameArray[i] === classNames[j]) {
+                    classNames.splice(i, 1);
+                }
+            }
+        }
+        element.className = classNames.join(' ');
+    };
+    
+    lazyLoad.prototype.init = function() {
+        var className = this.getClassName();
+        var lazies = document.querySelectorAll(className);
+
+        document.addEventListener('scroll', this._scrollProcess, false);
+    };
+
+    var lazyLoader = new lazyLoad('.lazy');
+    lazyLoader.init();
+    /*-- lazy load img end --*/
+})(this);    
+</script>
+</body>
+</html>

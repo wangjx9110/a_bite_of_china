@@ -1,0 +1,67 @@
+@img-bg-url: url('bg.jpg');
+@size-bg: 72;
+@img-banner-url: url('images/banner.png');
+@size-banner: 379;
+
+body {
+    background-image: @img-bg-url;
+    background-size: @size-bg / 2px;
+}
+
+.header {
+    width: 100%;
+    position: relative;
+}
+.header img {
+    display: block;
+    width: 100%;    
+}
+.header .attend {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 55%;
+    height: 11%;
+    top: 47%;
+    left: 10%;
+}
+
+.activity {
+    
+}
+.activity-item {
+    width: 100%;
+    position: relative;
+}
+.activity-item img {
+    display: block;
+    width: 100%;
+}
+.activity-item .attend {
+    position: absolute;
+    width: 32%;
+    height: 10%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1;
+    bottom: 8%;
+    left: 33%;
+}
+
+.more {
+    width: 100%;
+    background-color: rgba(255,255,255,0.5);
+    background-image: @img-banner-url;
+    background-size: @size-banner / 2px;
+    background-repeat: no-repeat;
+    background-position: center 12px;
+    padding-top: 88px;
+    margin-top: 20px;
+}
+ul {
+    
+}
+li {
+    width: 50%;
+    background-color: #eee;
+    float: left;
+    height: 50px;
+}
