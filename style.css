@@ -37,7 +37,7 @@ body {
 }
 .more {
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.2);
   background-image: url('images/banner.png');
   background-size: 189.5px;
   background-repeat: no-repeat;
@@ -45,9 +45,45 @@ body {
   padding-top: 88px;
   margin-top: 20px;
 }
-li {
+.more-item {
   width: 50%;
-  background-color: #eee;
+/*  background-color: #aaa;*/
   float: left;
-  height: 50px;
+  padding-bottom: 1%;
+}
+.more-item:nth-child(odd) {
+  padding-left: 1%;
+  padding-right: 0.5%;
+}
+.more-item:nth-child(even) {
+  padding-left: 0.5%;
+  padding-right: 1%;
+}
+.more-item img {
+  width: 100%;
+  display: block;
+}
+.more-item .title {
+  position: relative;
+}
+.slogan {
+  position: absolute;
+  height: 20px;
+  width: 100%;
+  bottom: 0px;
+  left: 0px;
+  color: #fff;
+  background-color: rgba(0,0,0,0.3);
+}
+.more-item .detail {
+
+}
+
+.banners-item {
+}
+.banners-item img {
+  display: block;
+  margin: 0 auto;
+  width: 320px;
+  height: 60px;
 }

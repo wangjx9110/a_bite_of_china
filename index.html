@@ -34,6 +34,7 @@
         opacity: 1;
         -webkit-transition: all 0.5s ease-out;
         transition: all 0.5s ease-out;
+        z-index: 1;
     }
     .mask.hide {
         visibility: hidden;
@@ -42,53 +43,198 @@
 </style>
 </head>
 <body>
-    <div class="mask hide">
+    <div class="mask">
         <div class="loading"></div>
     </div>
     <header class="header">
         <img src="images/a_01.jpg" alt="">
-        <div class="attend"></div>        
+        
     </header>
     <section class="activity">
         <div class="activity-item">
             <img src="images/a_02.jpg" alt="">
-            <div class="attend"></div>
+
         </div>
         <div class="activity-item">
             <img src="images/a_03.jpg" alt="">
-            <div class="attend"></div>
+
         </div>
         <div class="activity-item">
             <img src="images/a_04.jpg" alt="">
-            <div class="attend"></div>
+
         </div>
     </section>
     <section class="more">
-        <ul>
-            <li></li>
-            <li></li>
-            <li></li>
+        <ul class="more-list">
+            <li class="more-item">
+                <div class="title">
+                    <img src="#" alt="">
+                    <div class="slogan">test</div>
+                </div>
+                <div class="detail">aaa</div>
+            </li>
+            <li class="more-item">
+                <div class="title">
+                    <img src="#" alt="">
+                    <div class="slogan">test</div>
+                </div>
+                <div class="detail">bbb</div>
+            </li>
+            <li class="more-item">
+                <div class="title">
+                    <img src="#" alt="">
+                    <div class="slogan">test</div>
+                </div>
+                <div class="detail">ccc</div>
+            </li>
         </ul>
+    </section>
+    <section class="banners">
+        <div class="banners-item">
+            <img src="#" alt="" width="320" height="120">
+        </div>
+        <div class="banners-item">
+            <img src="#" alt="" width="320" height="120">
+        </div>
     </section>
 <script src="http://g.tbcdn.cn/mtb/zepto/1.0.4/zepto.js"></script>
 <script src="http://g.tbcdn.cn/??ilw/lib/0.2.3/sea.js,ilw/lib/0.2.3/iscroll.js,ilw/lib/0.4.13/api/laiwang.js"></script>
 <script>
 (function(global, undefined) {
     'use strict';
+    var TMS_URL = 'http://m.laiwang.com/market/laiwang/bite-of-china-data.php';
+    var TPL = {
+        MORE_ITEM_TPL:  '<li class="more-item" data-eventId="${eventId}" data-eventCode="${eventCode}">\
+                            <div class="title">\
+                                <img src="#" data-src="${img}">\
+                                <div class="slogan">${slogan}</div>\
+                            </div>\
+                            <div class="detail">${detail}</div>\
+                        </li>',
+        BANNERS_ITEM_TPL:   '<div class="banners-item">\
+                                <img src="#" data-src="${img}">\
+                            </div>'
+    };
+
     var Singleton = (function() {
         var instance;
-        function init() {
+        function page() {
 
+            var DATA = null;
+
+            /** options format
+             *  [
+             *      { target: /\\${test}/g, source: 'test' },
+             *      { ... }
+             *  ]
+             */
+            var _replace = function(tpl, options) {    //replace function, use 'options' to fill 'tpl'
+                var tempTpl = tpl;
+                for (var i = 0, len = options.length; i < len; i++) {
+                    var item = options[i];
+                    tempTpl = tempTpl.replace(item.target, item.source);
+                }
+                return tempTpl;
+            }
+
+            var loadTmsData = function(callback) {
+                $.ajax({
+                    url: TMS_URL,
+                    dataType: 'jsonp',
+                    data: {
+                        t: new Date().getTime()
+                    },
+                    success: function(result) {
+                        console.log(result);
+                        DATA = result;
+                        callback();
+                    },
+                    error: function() {
+
+                    }
+                });
+            };
+
+            var renderHeader = function() {
+                var targetElement = document.querySelector('.header');
+                var div = document.createElement('div');
+                div.className = 'attend';
+                div.addEventListener('click', function() {
+                    alert(DATA.header[0].eventId);
+                }, false);
+                targetElement.appendChild(div);
+            };
+            var renderActivity = function() {
+                var targetElements = document.querySelectorAll('.activity-item');
+                for (var i = 0, len = targetElements.length; i < len; i++) {
+                    var div = document.createElement('div');
+                    div.className = 'attend';
+
+                    (function(_i) {
+                        div.addEventListener('click', function() {
+                            alert(DATA.activity[_i].feedId);
+                        }, false);
+                    })(i);
+
+                    targetElements[i].appendChild(div);
+                }
+            };
+            var renderMore = function() {
+                var targetElement = document.querySelector('.more-list');
+                var data = DATA.more;
+                var innerHTML = '';
+                for (var i = 0, len = data.length; i < len; i++) {
+                    var item = data[i];
+                    innerHTML += _replace(TPL.MORE_ITEM_TPL, [
+                        { target: /\${eventId}/g, source: item.eventId },
+                        { target: /\${eventCode}/g, source: item.eventCode },
+                        { target: /\${img}/g, source: item.img },
+                        { target: /\${slogan}/g, source: item.slogan },
+                        { target: /\${detail}/g, source: item.detail }
+                    ]);
+                }
+                targetElement.innerHTML = innerHTML;
+            };
+            var renderBanner = function() {
+                var targetElement = document.querySelector('.banners');
+                var data = DATA.banner;
+                var innerHTML = '';
+                for (var i = 0, len = data.length; i < len; i++) {
+                    var item = data[i];
+                    innerHTML += _replace(TPL.BANNERS_ITEM_TPL, [
+                        { target: /\${img}/g, source: item.img }
+                    ]);
+                }
+                targetElement.innerHTML = innerHTML;
+            };
+
+            var render = function() {
+                renderHeader();
+                renderActivity();
+                renderMore();
+                renderBanner();
+                $('.mask').addClass('hide');
+            };
+
+            return {
+                init: function() {
+                    console.log('INIT');
+                    loadTmsData(render);
+                }
+            };
         }
         return {
             getInstance: function() {
                 if (!instance) {
-                    instance = init(); 
+                    instance = page(); 
                 }
                 return instance;
             }
         };
     })();
+
+    Singleton.getInstance().init();
+
     /*-- lazy load img start --*/
     var lazyLoad = (function() {
 
